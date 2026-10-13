@@ -42,6 +42,26 @@ npm run dev
 ```
 Open the Vite URL shown in terminal (usually `http://localhost:5173`).
 
+## Deploy to Render and Vercel
+
+The Render backend needs an externally hosted MySQL database; Render's managed
+database offering is PostgreSQL, which this project does not use. Do not use a
+local MySQL address such as `localhost` for the deployed database.
+
+1. In Render, create a Blueprint from this repository using `render.yaml`.
+   Set `SPRING_DATASOURCE_URL` to the MySQL JDBC URL, and provide its username
+   and password as the requested secret environment variables.
+2. In Vercel, import the repository and set the project root to `frontend`.
+   Set `VITE_API_URL` to the deployed Render service URL followed by `/api`
+   (for example, `https://your-service.onrender.com/api`) before deploying.
+3. Set `APP_CORS_ALLOWED_ORIGINS` on Render to the Vercel site origin, without
+   a trailing slash (for example, `https://your-site.vercel.app`). Redeploy the
+   Render service after setting it.
+
+The Vercel configuration serves the Vite single-page app, and the Render
+configuration builds and runs the Spring Boot backend. Render's free web
+services may spin down when idle.
+
 ## API endpoints
 - `GET/POST /api/students`
 - `GET/PUT/DELETE /api/students/{id}`
