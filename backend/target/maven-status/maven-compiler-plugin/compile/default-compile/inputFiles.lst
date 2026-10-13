@@ -1,0 +1,13 @@
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\config\WebConfig.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\controller\DashboardController.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\controller\FeeStructureController.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\controller\PaymentController.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\controller\StudentController.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\dto\PaymentRequest.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\model\FeePayment.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\model\FeeStructure.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\model\Student.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\repository\FeePaymentRepository.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\repository\FeeStructureRepository.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\repository\StudentRepository.java
+C:\Users\Admin\Downloads\online-school-fee-management-source\backend\src\main\java\com\example\schoolfee\SchoolFeeApplication.java

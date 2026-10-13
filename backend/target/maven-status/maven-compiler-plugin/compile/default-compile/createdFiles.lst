@@ -1,0 +1,13 @@
+com\example\schoolfee\SchoolFeeApplication.class
+com\example\schoolfee\repository\FeeStructureRepository.class
+com\example\schoolfee\dto\PaymentRequest.class
+com\example\schoolfee\config\WebConfig.class
+com\example\schoolfee\repository\StudentRepository.class
+com\example\schoolfee\controller\FeeStructureController.class
+com\example\schoolfee\repository\FeePaymentRepository.class
+com\example\schoolfee\controller\DashboardController.class
+com\example\schoolfee\model\FeePayment.class
+com\example\schoolfee\controller\PaymentController.class
+com\example\schoolfee\model\FeeStructure.class
+com\example\schoolfee\model\Student.class
+com\example\schoolfee\controller\StudentController.class
