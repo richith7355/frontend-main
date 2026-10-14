@@ -44,23 +44,67 @@ Open the Vite URL shown in terminal (usually `http://localhost:5173`).
 
 ## Deploy to Render and Vercel
 
-The Render backend needs an externally hosted MySQL database; Render's managed
-database offering is PostgreSQL, which this project does not use. Do not use a
-local MySQL address such as `localhost` for the deployed database.
+### Architecture and prerequisites
 
-1. In Render, create a Blueprint from this repository using `render.yaml`.
-   Set `SPRING_DATASOURCE_URL` to the MySQL JDBC URL, and provide its username
-   and password as the requested secret environment variables.
-2. In Vercel, import the repository and set the project root to `frontend`.
-   Set `VITE_API_URL` to the deployed Render service URL followed by `/api`
-   (for example, `https://your-service.onrender.com/api`) before deploying.
-3. Set `APP_CORS_ALLOWED_ORIGINS` on Render to the Vercel site origin, without
-   a trailing slash (for example, `https://your-site.vercel.app`). Redeploy the
-   Render service after setting it.
+- Frontend: React 18 + Vite in `frontend/`; Vercel build command `npm run build`,
+  output directory `dist`, install command `npm install`.
+- Backend: Spring Boot 3.3 + Java 17 + Maven in `backend/`; Render builds the
+  Dockerfile at `backend/Dockerfile`. The container listens on Render's `PORT`.
+- Database: MySQL 8. Render's managed database is PostgreSQL, so use a separate
+  hosted MySQL provider. Do not point a deployed service at `localhost` or
+  replace the production database URL with a PostgreSQL URL.
+- This demo has no authentication or authorization. Do not enter real student
+  or payment data.
 
-The Vercel configuration serves the Vite single-page app, and the Render
-configuration builds and runs the Spring Boot backend. Render's free web
-services may spin down when idle.
+The root `.env.example` documents placeholder values only. Configure each
+variable in the named platform; do not commit a real `.env` file.
+
+| Variable | Purpose | Configure in |
+| --- | --- | --- |
+| `SPRING_DATASOURCE_URL` | JDBC URL for the hosted MySQL database | Render |
+| `SPRING_DATASOURCE_USERNAME` | MySQL account name | Render |
+| `SPRING_DATASOURCE_PASSWORD` | MySQL account password | Render secret |
+| `APP_CORS_ALLOWED_ORIGINS` | Exact Vercel site origin(s), comma-separated, no trailing slash | Render |
+| `VITE_API_URL` | Render backend URL followed by `/api` | Vercel |
+
+### Deploy the backend first
+
+1. Push the deployment changes to the GitHub repository's `main` branch.
+   In Render, choose **New > Blueprint**, connect `richith7355/frontend-main`,
+   and select `render.yaml`. The Blueprint creates the Docker web service.
+2. Before deploying, provision a hosted MySQL 8 database with an externally
+   reachable connection. In Render's service environment, set
+   `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, and
+   `SPRING_DATASOURCE_PASSWORD` to the database provider's values. Use its
+   documented TLS/JDBC connection options; keep the database password secret.
+3. Deploy the service. Its health check is `GET /health`; after it passes,
+   copy the service's public `https://…onrender.com` URL. The database must
+   allow connections from Render. Do not reset or recreate an existing database.
+
+### Deploy the frontend
+
+1. In Vercel, import `richith7355/frontend-main` (or update the existing
+   project connected to that repository). Set **Root Directory** to `frontend`.
+   Use framework preset **Vite**, install command `npm install`, build command
+   `npm run build`, and output directory `dist`. `frontend/vercel.json` already
+   rewrites SPA routes to `index.html`.
+2. Add `VITE_API_URL` with the Render URL plus `/api`, for example
+   `https://your-service.onrender.com/api`, for Production (and Preview if
+   preview deployments should use the same backend). Redeploy after adding it.
+3. Copy the deployed Vercel site origin, for example
+   `https://your-site.vercel.app`, into Render's `APP_CORS_ALLOWED_ORIGINS`
+   (origin only, no path or trailing slash), then redeploy the backend.
+   For multiple trusted origins, separate them with commas.
+
+### Verify
+
+- Open `https://your-service.onrender.com/health`; expect `{"status":"UP"}`.
+- Open `https://your-service.onrender.com/api/dashboard`; expect a JSON
+  summary. This endpoint also verifies the MySQL connection.
+- Open the Vercel site, then inspect the browser Network/Console for successful
+  `/api/` requests and CORS or database errors.
+- Render's free web services may spin down when idle. This application does
+  not use cookies, authentication, file uploads, or background workers.
 
 ## API endpoints
 - `GET/POST /api/students`
