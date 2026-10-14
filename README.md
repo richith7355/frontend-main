@@ -53,6 +53,10 @@ Open the Vite URL shown in terminal (usually `http://localhost:5173`).
 - Database: MySQL 8. Render's managed database is PostgreSQL, so use a separate
   hosted MySQL provider. Do not point a deployed service at `localhost` or
   replace the production database URL with a PostgreSQL URL.
+- If moving an existing local database, make and verify a private backup first.
+  Import it into the hosted MySQL database, verify table counts and representative
+  records, and keep the local source unchanged until the live app is confirmed.
+  Never commit or share the database dump; it may contain personal information.
 - This demo has no authentication or authorization. Do not enter real student
   or payment data.
 
@@ -77,7 +81,14 @@ variable in the named platform; do not commit a real `.env` file.
    `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, and
    `SPRING_DATASOURCE_PASSWORD` to the database provider's values. Use its
    documented TLS/JDBC connection options; keep the database password secret.
-3. Deploy the service. Its health check is `GET /health`; after it passes,
+3. If migrating the existing local `school_fee_db`, first take a private
+   backup with `mysqldump --host=localhost --user=root --password
+   --single-transaction school_fee_db > school_fee_db.sql` (enter the password
+   only at the prompt). Import it to the hosted database using the provider's
+   documented secure connection method. Verify the import before pointing the
+   application at it, and retain the local database and backup until cutover
+   is verified. Do not overwrite or drop the source database.
+4. Deploy the service. Its health check is `GET /health`; after it passes,
    copy the service's public `https://…onrender.com` URL. The database must
    allow connections from Render. Do not reset or recreate an existing database.
 
